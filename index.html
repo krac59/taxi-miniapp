@@ -2,291 +2,1265 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚕 Такси-Система - MiniApp</title>
-    <meta name="telegram:viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <meta name="telegram:color-scheme" content="light dark">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🚕 Такси-система | Админ-панель Краснодарский край + Крым</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     
     <style>
-        :root {
-            --primary: #1E88E5;
-            --secondary: #FF6B6B;
-            --success: #4CAF50;
-            --dark: #1a1a1a;
-            --light: #f8f9fa;
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--light);
-            color: #333;
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
-            max-width: 500px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
             margin: 0 auto;
         }
-        
+
+        /* Header */
         .header {
-            background: linear-gradient(135deg, var(--primary), #0d47a1);
-            color: white;
-            padding: 25px;
-            border-radius: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        
-        .card {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
-        
-        .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            width: 100%;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 15px;
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
         }
-        
-        .btn:hover {
-            background: #1565C0;
-            transform: scale(1.02);
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-        }
-        
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
+
+        .logo span {
+            color: #667eea;
+            font-size: 14px;
             font-weight: 500;
-            color: #555;
         }
-        
-        .input-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
-        
-        .result {
+
+        .badge {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .time {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 20px;
             padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
             border-radius: 15px;
-            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .card-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .card-label {
+            color: #a0aec0;
+            font-size: 14px;
+        }
+
+        /* Тарифы */
+        .tariff-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .tariff-item {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 15px;
             text-align: center;
+        }
+
+        .tariff-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .tariff-label {
+            color: #718096;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* География */
+        .geo-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .region {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .region h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .city-list {
+            list-style: none;
+        }
+
+        .city-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .city-list li:last-child {
+            border-bottom: none;
+        }
+
+        .city-name {
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .city-count {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        /* Таблицы */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px 10px;
+            color: #718096;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        td {
+            padding: 15px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #4a5568;
+        }
+
+        .status {
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status.active {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status.pending {
+            background: #feebc8;
+            color: #744210;
+        }
+
+        /* Кнопки */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            background: white;
+            border-radius: 50px;
+            font-weight: 600;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab:hover:not(.active) {
+            background: #f7fafc;
+        }
+
+        /* Panels */
+        .panel {
             display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 25px;
         }
-        
-        .result.show {
+
+        .panel.active {
             display: block;
-            animation: fadeIn 0.5s;
         }
-        
-        .price {
-            font-size: 48px;
-            font-weight: bold;
-            margin: 15px 0;
+
+        /* Form controls */
+        .form-group {
+            margin-bottom: 20px;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 14px;
         }
-        
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: var(--dark);
-                color: #f0f0f0;
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* ML Section */
+        .ml-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            color: #718096;
+            font-size: 13px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
             }
             
-            .card {
-                background: #2d2d2d;
+            .tariff-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
             
-            .input-group select {
-                background: #3d3d3d;
-                color: #f0f0f0;
-                border-color: #444;
+            .geo-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .ml-metrics {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
-    
-    <!-- Telegram Web App SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <div class="header">
-        <h1><i class="fas fa-taxi"></i> Такси Краснодар</h1>
-        <p>AI прогноз цен • Быстрый заказ • Безопасно</p>
-    </div>
-    
-    <div class="card">
-        <h2 style="color: var(--primary); margin-bottom: 20px;">
-            <i class="fas fa-calculator"></i> Рассчитать стоимость
-        </h2>
-        
-        <div class="input-group">
-            <label><i class="fas fa-map-marker-alt"></i> Откуда:</label>
-            <select id="fromCity">
-                <option value="Краснодар">Краснодар</option>
-                <option value="Сочи">Сочи</option>
-                <option value="Новороссийск">Новороссийск</option>
-                <option value="Армавир">Армавир</option>
-                <option value="Анапа">Анапа</option>
-            </select>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <h1>🚕 Такси-система Краснодарский край + Крым</h1>
+                <span>Версия 5.0 • Интеллектуальное ценообразование • Мониторинг конкурентов</span>
+            </div>
+            <div class="admin-info">
+                <div class="badge">
+                    <i class="fas fa-crown"></i>
+                    Администратор
+                </div>
+                <div class="time" id="currentTime">
+                    <i class="far fa-clock"></i>
+                    Загрузка...
+                </div>
+            </div>
         </div>
-        
-        <div class="input-group">
-            <label><i class="fas fa-flag-checkered"></i> Куда:</label>
-            <select id="toCity">
-                <option value="Сочи">Сочи</option>
-                <option value="Краснодар">Краснодар</option>
-                <option value="Новороссийск">Новороссийск</option>
-                <option value="Армавир">Армавир</option>
-                <option value="Анапа">Анапа</option>
-            </select>
+
+        <!-- Quick Stats -->
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Всего поездок</div>
+                    <div class="card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="fas fa-car"></i>
+                    </div>
+                </div>
+                <div class="card-value">12,847</div>
+                <div class="card-label">+234 за сегодня</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Выручка</div>
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <i class="fas fa-ruble-sign"></i>
+                    </div>
+                </div>
+                <div class="card-value">6,589,211 ₽</div>
+                <div class="card-label">+45,670 ₽ сегодня</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Активные водители</div>
+                    <div class="card-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="card-value">424</div>
+                <div class="card-label">+12 за неделю</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Точность ML</div>
+                    <div class="card-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                </div>
+                <div class="card-value">94.3%</div>
+                <div class="card-label">+0.2% за неделю</div>
+            </div>
         </div>
-        
-        <button class="btn" onclick="calculatePrice()">
-            <i class="fas fa-calculator"></i> Рассчитать
-        </button>
-    </div>
-    
-    <div id="result" class="result">
-        <h3><i class="fas fa-coins"></i> Стоимость поездки</h3>
-        <div class="price" id="calculatedPrice">0 ₽</div>
-        <p id="distance">Расстояние: 0 км</p>
-        <p id="time">Примерное время: 0 ч</p>
-        
-        <button class="btn" onclick="orderTaxi()" style="background: var(--success); margin-top: 20px;">
-            <i class="fas fa-taxi"></i> Заказать такси
-        </button>
-    </div>
-    
-    <div class="card">
-        <h3 style="color: var(--primary); margin-bottom: 15px;">
-            <i class="fas fa-bolt"></i> Быстрые маршруты
-        </h3>
-        <button class="btn" onclick="setRoute('Краснодар', 'Сочи')" style="background: var(--secondary); margin-bottom: 10px;">
-            Краснодар → Сочи
-        </button>
-        <button class="btn" onclick="setRoute('Краснодар', 'Новороссийск')" style="background: var(--secondary); margin-bottom: 10px;">
-            Краснодар → Новороссийск
-        </button>
-        <button class="btn" onclick="setRoute('Сочи', 'Краснодар')" style="background: var(--secondary);">
-            Сочи → Краснодар
-        </button>
-    </div>
-    
-    <script>
-        // Инициализация Telegram Web App
-        if (window.Telegram && Telegram.WebApp) {
-            Telegram.WebApp.ready();
-            Telegram.WebApp.expand();
-            Telegram.WebApp.setHeaderColor('#1E88E5');
-            Telegram.WebApp.setBackgroundColor('#f8f9fa');
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" data-tab="dashboard">📊 Дашборд</div>
+            <div class="tab" data-tab="tariffs">💰 Тарифы</div>
+            <div class="tab" data-tab="geography">📍 География</div>
+            <div class="tab" data-tab="competitors">🏆 Конкуренты</div>
+            <div class="tab" data-tab="ml">🤖 ML модель</div>
+            <div class="tab" data-tab="documents">📋 Документы</div>
+            <div class="tab" data-tab="users">👥 Пользователи</div>
+        </div>
+
+        <!-- Panel: Dashboard -->
+        <div id="dashboard" class="panel active">
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 25px;">
+                <div style="background: #f7fafc; border-radius: 15px; padding: 20px;">
+                    <h3 style="margin-bottom: 20px;">📈 Динамика поездок (последние 7 дней)</h3>
+                    <canvas id="ridesChart" style="width: 100%; height: 300px;"></canvas>
+                </div>
+                <div style="background: #f7fafc; border-radius: 15px; padding: 20px;">
+                    <h3 style="margin-bottom: 20px;">🏙 Топ-5 маршрутов</h3>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Краснодар → Сочи</span>
+                            <span style="font-weight: 700; color: #667eea;">1,245</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Симферополь → Ялта</span>
+                            <span style="font-weight: 700; color: #667eea;">876</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Краснодар → Анапа</span>
+                            <span style="font-weight: 700; color: #667eea;">654</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Керчь → Симферополь</span>
+                            <span style="font-weight: 700; color: #667eea;">543</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>Севастополь → Ялта</span>
+                            <span style="font-weight: 700; color: #667eea;">432</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel: Tariffs -->
+        <div id="tariffs" class="panel">
+            <h2 style="margin-bottom: 25px;">💰 Управление тарифами</h2>
             
-            // Получаем данные пользователя
-            const user = Telegram.WebApp.initDataUnsafe.user;
-            if (user) {
-                console.log('Пользователь:', user.first_name);
-            }
-        }
-        
-        // Маршруты и цены (упрощенная версия)
-        const routes = {
-            'Краснодар-Сочи': { price: 4500, distance: 280, time: 4.5 },
-            'Краснодар-Новороссийск': { price: 2800, distance: 140, time: 2.5 },
-            'Сочи-Краснодар': { price: 4500, distance: 280, time: 4.5 },
-            'Новороссийск-Краснодар': { price: 2800, distance: 140, time: 2.5 },
-            'Краснодар-Армавир': { price: 2200, distance: 180, time: 3 },
-            'Краснодар-Анапа': { price: 2400, distance: 160, time: 2.5 },
-            'default': { price: 1500, distance: 150, time: 2.5 }
-        };
-        
-        function setRoute(from, to) {
-            document.getElementById('fromCity').value = from;
-            document.getElementById('toCity').value = to;
-            calculatePrice();
-        }
-        
-        function calculatePrice() {
-            const fromCity = document.getElementById('fromCity').value;
-            const toCity = document.getElementById('toCity').value;
-            
-            const routeKey = `${fromCity}-${toCity}`;
-            const route = routes[routeKey] || routes['default'];
-            
-            // Добавляем случайность для реалистичности
-            const randomFactor = 0.9 + Math.random() * 0.2; // ±10%
-            const finalPrice = Math.round(route.price * randomFactor / 100) * 100;
-            
-            // Показываем результат
-            const resultDiv = document.getElementById('result');
-            document.getElementById('calculatedPrice').textContent = `${finalPrice.toLocaleString()} ₽`;
-            document.getElementById('distance').textContent = `Расстояние: ${route.distance} км`;
-            document.getElementById('time').textContent = `Примерное время: ${route.time} ч`;
-            
-            resultDiv.classList.add('show');
-            
-            // Прокручиваем к результату
-            resultDiv.scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        function orderTaxi() {
-            const fromCity = document.getElementById('fromCity').value;
-            const toCity = document.getElementById('toCity').value;
-            const price = document.getElementById('calculatedPrice').textContent;
-            
-            if (window.Telegram && Telegram.WebApp) {
-                // Отправляем данные в Telegram бота
-                Telegram.WebApp.sendData(JSON.stringify({
-                    action: 'order_taxi',
-                    from_city: fromCity,
-                    to_city: toCity,
-                    price: price
-                }));
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;">
+                <!-- Базовые тарифы -->
+                <div style="background: #f7fafc; border-radius: 15px; padding: 25px;">
+                    <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-car" style="color: #667eea;"></i>
+                        Базовые тарифы
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">🚖 Подача авто</label>
+                        <input type="number" id="basePrice" class="form-control" value="60" min="0" step="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">🛣 Стоимость 1 км</label>
+                        <input type="number" id="pricePerKm" class="form-control" value="17" min="0" step="0.5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">💰 Минимальная стоимость</label>
+                        <input type="number" id="minPrice" class="form-control" value="150" min="0" step="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">💳 Комиссия сервиса (%)</label>
+                        <input type="number" id="commission" class="form-control" value="15" min="0" max="50" step="0.5">
+                    </div>
+                </div>
                 
-                // Закрываем Web App
-                Telegram.WebApp.close();
-            } else {
-                alert(`Заказ создан!\n${fromCity} → ${toCity}\nСтоимость: ${price}\n\nВернитесь в Telegram для подтверждения.`);
-            }
+                <!-- Коэффициенты -->
+                <div style="background: #f7fafc; border-radius: 15px; padding: 25px;">
+                    <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-sliders-h" style="color: #f093fb;"></i>
+                        Коэффициенты
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">🚦 Пробки (x)</label>
+                        <input type="number" id="trafficCoef" class="form-control" value="1.3" min="1" max="2" step="0.1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">🌧 Дождь (x)</label>
+                        <input type="number" id="rainCoef" class="form-control" value="1.2" min="1" max="2" step="0.1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">❄️ Снег (x)</label>
+                        <input type="number" id="snowCoef" class="form-control" value="1.5" min="1" max="3" step="0.1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">🌙 Ночной тариф (x)</label>
+                        <input type="number" id="nightCoef" class="form-control" value="1.4" min="1" max="2" step="0.1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">🎉 Праздничный (x)</label>
+                        <input type="number" id="holidayCoef" class="form-control" value="1.3" min="1" max="2" step="0.1">
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                <button class="btn btn-primary" onclick="saveTariffs()">
+                    <i class="fas fa-save"></i>
+                    Сохранить тарифы
+                </button>
+                <button class="btn btn-outline" onclick="resetTariffs()">
+                    <i class="fas fa-undo"></i>
+                    Сбросить
+                </button>
+            </div>
+        </div>
+
+        <!-- Panel: Geography -->
+        <div id="geography" class="panel">
+            <h2 style="margin-bottom: 25px;">📍 География обслуживания</h2>
+            
+            <div class="geo-stats">
+                <div class="region">
+                    <h3>
+                        <i class="fas fa-city" style="color: #667eea;"></i>
+                        Краснодарский край (15 городов)
+                    </h3>
+                    <ul class="city-list" id="kubanCities">
+                        <li><span class="city-name">Краснодар</span> <span class="city-count">4,234 поездки</span></li>
+                        <li><span class="city-name">Сочи</span> <span class="city-count">2,876 поездок</span></li>
+                        <li><span class="city-name">Новороссийск</span> <span class="city-count">1,543 поездки</span></li>
+                        <li><span class="city-name">Геленджик</span> <span class="city-count">1,234 поездки</span></li>
+                        <li><span class="city-name">Анапа</span> <span class="city-count">987 поездок</span></li>
+                        <li><span class="city-name">Туапсе</span> <span class="city-count">654 поездки</span></li>
+                        <li><span class="city-name">Ейск</span> <span class="city-count">543 поездки</span></li>
+                        <li><span class="city-name">Армавир</span> <span class="city-count">432 поездки</span></li>
+                        <li><span class="city-name">Кропоткин</span> <span class="city-count">321 поездка</span></li>
+                        <li><span class="city-name">Тихорецк</span> <span class="city-count">234 поездки</span></li>
+                        <li><span class="city-name">Лабинск</span> <span class="city-count">198 поездок</span></li>
+                        <li><span class="city-name">Крымск</span> <span class="city-count">176 поездок</span></li>
+                        <li><span class="city-name">Белореченск</span> <span class="city-count">154 поездки</span></li>
+                        <li><span class="city-name">Тимашевск</span> <span class="city-count">132 поездки</span></li>
+                        <li><span class="city-name">Славянск-на-Кубани</span> <span class="city-count">98 поездок</span></li>
+                    </ul>
+                </div>
+                
+                <div class="region">
+                    <h3>
+                        <i class="fas fa-umbrella-beach" style="color: #4facfe;"></i>
+                        Республика Крым (14 городов)
+                    </h3>
+                    <ul class="city-list" id="crimeaCities">
+                        <li><span class="city-name">Симферополь</span> <span class="city-count">2,345 поездок</span></li>
+                        <li><span class="city-name">Севастополь</span> <span class="city-count">1,876 поездок</span></li>
+                        <li><span class="city-name">Ялта</span> <span class="city-count">1,654 поездки</span></li>
+                        <li><span class="city-name">Алушта</span> <span class="city-count">1,098 поездок</span></li>
+                        <li><span class="city-name">Евпатория</span> <span class="city-count">876 поездок</span></li>
+                        <li><span class="city-name">Феодосия</span> <span class="city-count">765 поездок</span></li>
+                        <li><span class="city-name">Керчь</span> <span class="city-count">654 поездки</span></li>
+                        <li><span class="city-name">Бахчисарай</span> <span class="city-count">543 поездки</span></li>
+                        <li><span class="city-name">Судак</span> <span class="city-count">432 поездки</span></li>
+                        <li><span class="city-name">Саки</span> <span class="city-count">321 поездка</span></li>
+                        <li><span class="city-name">Джанкой</span> <span class="city-count">287 поездок</span></li>
+                        <li><span class="city-name">Армянск</span> <span class="city-count">198 поездок</span></li>
+                        <li><span class="city-name">Красноперекопск</span> <span class="city-count">165 поездок</span></li>
+                        <li><span class="city-name">Белогорск</span> <span class="city-count">143 поездки</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <h3 style="margin-bottom: 15px;">🔄 Межрегиональные маршруты</h3>
+                <div style="background: #f7fafc; border-radius: 15px; padding: 20px;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Краснодар → Симферополь</span>
+                            <span style="font-weight: 700; color: #667eea;">847 поездок</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Анапа → Керчь</span>
+                            <span style="font-weight: 700; color: #667eea;">654 поездки</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Краснодар → Керчь</span>
+                            <span style="font-weight: 700; color: #667eea;">543 поездки</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Новороссийск → Симферополь</span>
+                            <span style="font-weight: 700; color: #667eea;">321 поездка</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; display: flex; gap: 15px;">
+                <button class="btn btn-primary" onclick="addCity()">
+                    <i class="fas fa-plus-circle"></i>
+                    Добавить город
+                </button>
+                <button class="btn btn-outline" onclick="editCities()">
+                    <i class="fas fa-edit"></i>
+                    Редактировать список
+                </button>
+            </div>
+        </div>
+
+        <!-- Panel: Competitors -->
+        <div id="competitors" class="panel">
+            <h2 style="margin-bottom: 25px;">🏆 Мониторинг конкурентов</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                <!-- Яндекс.Такси -->
+                <div style="background: #f7fafc; border-radius: 15px; padding: 25px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="width: 50px; height: 50px; background: #fc0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: #000;">
+                            Я
+                        </div>
+                        <div>
+                            <h3 style="margin-bottom: 5px;">Яндекс.Такси</h3>
+                            <span style="color: #718096; font-size: 13px;">Мониторинг активен</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">📈 Не выше Яндекс.Такси на (%)</label>
+                        <input type="number" id="yandexAbove" class="form-control" value="15" min="0" max="50" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">📉 Не ниже Яндекс.Такси на (%)</label>
+                        <input type="number" id="yandexBelow" class="form-control" value="10" min="0" max="50" step="1">
+                    </div>
+                    
+                    <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 12px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Текущее отклонение:</span>
+                            <span style="font-weight: 700; color: #38a169;">-12% (ниже)</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Средняя цена конкурента:</span>
+                            <span style="font-weight: 700;">583 ₽</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Такси Максим -->
+                <div style="background: #f7fafc; border-radius: 15px; padding: 25px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="width: 50px; height: 50px; background: #ff6b6b; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: white;">
+                            М
+                        </div>
+                        <div>
+                            <h3 style="margin-bottom: 5px;">Такси Максим</h3>
+                            <span style="color: #718096; font-size: 13px;">Мониторинг активен</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">📈 Не выше Такси Максим на (%)</label>
+                        <input type="number" id="maximAbove" class="form-control" value="20" min="0" max="50" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">📉 Не ниже Такси Максим на (%)</label>
+                        <input type="number" id="maximBelow" class="form-control" value="15" min="0" max="50" step="1">
+                    </div>
+                    
+                    <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 12px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Текущее отклонение:</span>
+                            <span style="font-weight: 700; color: #38a169;">-18% (ниже)</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Средняя цена конкурента:</span>
+                            <span style="font-weight: 700;">512 ₽</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: #f7fafc; border-radius: 15px; padding: 25px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 15px;">📊 Сравнение цен на популярных маршрутах</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Маршрут</th>
+                                <th>Наша цена</th>
+                                <th>Яндекс</th>
+                                <th>Максим</th>
+                                <th>Отклонение</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Краснодар → Сочи</td>
+                                <td><strong>4,850 ₽</strong></td>
+                                <td>5,490 ₽</td>
+                                <td>5,120 ₽</td>
+                                <td><span style="color: #38a169;">▼ -12%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Симферополь → Ялта</td>
+                                <td><strong>1,450 ₽</strong></td>
+                                <td>1,690 ₽</td>
+                                <td>1,580 ₽</td>
+                                <td><span style="color: #38a169;">▼ -14%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Краснодар → Анапа</td>
+                                <td><strong>2,950 ₽</strong></td>
+                                <td>3,390 ₽</td>
+                                <td>3,180 ₽</td>
+                                <td><span style="color: #38a169;">▼ -13%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Керчь → Симферополь</td>
+                                <td><strong>3,650 ₽</strong></td>
+                                <td>4,190 ₽</td>
+                                <td>3,990 ₽</td>
+                                <td><span style="color: #38a169;">▼ -13%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 15px;">
+                <button class="btn btn-primary" onclick="saveCompetitorSettings()">
+                    <i class="fas fa-save"></i>
+                    Сохранить настройки
+                </button>
+                <button class="btn btn-outline" onclick="updateCompetitorPrices()">
+                    <i class="fas fa-sync-alt"></i>
+                    Обновить цены
+                </button>
+            </div>
+        </div>
+
+        <!-- Panel: ML Model -->
+        <div id="ml" class="panel">
+            <h2 style="margin-bottom: 25px;">🤖 Управление ML моделью</h2>
+            
+            <div class="ml-metrics">
+                <div class="metric">
+                    <div class="metric-value">94.3%</div>
+                    <div class="metric-label">Точность прогноза цены</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">91.2%</div>
+                    <div class="metric-label">Точность времени</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">87.5%</div>
+                    <div class="metric-label">Точность спроса</div>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 30px;">
+                <div style="background: #f7fafc; border-radius: 15px; padding: 25px;">
+                    <h3 style="margin-bottom: 20px;">📈 Прогноз спроса на сегодня</h3>
+                    <canvas id="demandChart" style="width: 100%; height: 250px;"></canvas>
+                </div>
+                
+                <div style="background: #f7fafc; border-radius: 15px; padding: 25px;">
+                    <h3 style="margin-bottom: 20px;">🎯 Рекомендации ML</h3>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="padding: 12px; background: white; border-radius: 12px; border-left: 4px solid #667eea;">
+                            <strong>08:00 - 10:00</strong>
+                            <p style="color: #718096; font-size: 13px; margin-top: 5px;">Краснодар, Симферополь - высокий спрос</p>
+                        </div>
+                        <div style="padding: 12px; background: white; border-radius: 12px; border-left: 4px solid #4facfe;">
+                            <strong>11:00 - 16:00</strong>
+                            <p style="color: #718096; font-size: 13px; margin-top: 5px;">Сочи, Ялта - туристические маршруты</p>
+                        </div>
+                        <div style="padding: 12px; background: white; border-radius: 12px; border-left: 4px solid #f093fb;">
+                            <strong>17:00 - 19:00</strong>
+                            <p style="color: #718096; font-size: 13px; margin-top: 5px;">Час пик, повышенный коэффициент</p>
+                        </div>
+                        <div style="padding: 12px; background: white; border-radius: 12px; border-left: 4px solid #43e97b;">
+                            <strong>Прогноз дохода</strong>
+                            <p style="color: #718096; font-size: 13px; margin-top: 5px;">+5,200 ₽ при работе 8 часов</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: #f7fafc; border-radius: 15px; padding: 25px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 20px;">🤖 Параметры модели</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <div>
+                        <label class="form-label">Количество деревьев</label>
+                        <input type="number" class="form-control" value="100" min="10" max="500">
+                    </div>
+                    <div>
+                        <label class="form-label">Макс. глубина</label>
+                        <input type="number" class="form-control" value="10" min="1" max="50">
+                    </div>
+                    <div>
+                        <label class="form-label">Learning rate</label>
+                        <input type="number" class="form-control" value="0.01" min="0.001" max="0.1" step="0.001">
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 15px;">
+                <button class="btn btn-primary" onclick="trainModel()">
+                    <i class="fas fa-brain"></i>
+                    Обучить модель
+                </button>
+                <button class="btn btn-outline" onclick="exportModel()">
+                    <i class="fas fa-download"></i>
+                    Экспортировать
+                </button>
+                <button class="btn btn-outline" onclick="importModel()">
+                    <i class="fas fa-upload"></i>
+                    Импортировать
+                </button>
+            </div>
+        </div>
+
+        <!-- Panel: Documents -->
+        <div id="documents" class="panel">
+            <h2 style="margin-bottom: 25px;">📋 Управление документами</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; margin-bottom: 30px;">
+                <div style="background: #f7fafc; border-radius: 15px; padding: 25px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
+                        <div>
+                            <h3>Договор оферты (пассажир)</h3>
+                            <span style="color: #718096; font-size: 13px;">Последнее изменение: сегодня</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-outline" style="flex: 1;" onclick="editDocument('oferta_passenger')">
+                            <i class="fas fa-edit"></i>
+                            Редактировать
+                        </button>
+                        <button class="btn btn-outline" onclick="downloadDocument('oferta_passenger')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="background: #f7fafc; border-radius: 15px; padding: 25px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">
+                            <i class="fas fa-file-signature"></i>
+                        </div>
+                        <div>
+                            <h3>Договор оферты (водитель)</h3>
+                            <span style="color: #718096; font-size: 13px;">Последнее изменение: сегодня</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-outline" style="flex: 1;" onclick="editDocument('oferta_driver')">
+                            <i class="fas fa-edit"></i>
+                            Редактировать
+                        </button>
+                        <button class="btn btn-outline" onclick="downloadDocument('oferta_driver')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 15px;">
+                <button class="btn btn-primary" onclick="createDocument()">
+                    <i class="fas fa-plus-circle"></i>
+                    Создать новый документ
+                </button>
+                <button class="btn btn-outline" onclick="syncDocuments()">
+                    <i class="fas fa-sync-alt"></i>
+                    Синхронизировать с ботом
+                </button>
+            </div>
+        </div>
+
+        <!-- Panel: Users -->
+        <div id="users" class="panel">
+            <h2 style="margin-bottom: 25px;">👥 Управление пользователями</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 25px; color: white;">
+                    <h3 style="color: white; margin-bottom: 15px;">Пассажиры</h3>
+                    <div style="font-size: 48px; font-weight: 700; margin-bottom: 5px;">2,423</div>
+                    <div style="opacity: 0.9;">активных пользователей</div>
+                    <div style="margin-top: 15px;">+156 за неделю</div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 15px; padding: 25px; color: white;">
+                    <h3 style="color: white; margin-bottom: 15px;">Водители</h3>
+                    <div style="font-size: 48px; font-weight: 700; margin-bottom: 5px;">424</div>
+                    <div style="opacity: 0.9;">активных водителей</div>
+                    <div style="margin-top: 15px;">+12 за неделю</div>
+                </div>
+            </div>
+            
+            <div style="background: #f7fafc; border-radius: 15px; padding: 25px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 20px;">🔍 Поиск пользователя</h3>
+                <div style="display: flex; gap: 15px;">
+                    <input type="text" class="form-control" placeholder="Введите ID или @username" style="flex: 1;">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                        Найти
+                    </button>
+                </div>
+            </div>
+            
+            <div style="background: #f7fafc; border-radius: 15px; padding: 25px;">
+                <h3 style="margin-bottom: 20px;">📋 Последние регистрации</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Роль</th>
+                                <th>Дата</th>
+                                <th>Статус</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>123456789</td>
+                                <td>@ivan_petrov</td>
+                                <td>Пассажир</td>
+                                <td>12.02.2026</td>
+                                <td><span class="status active">Активен</span></td>
+                                <td>
+                                    <button style="background: none; border: none; color: #667eea; cursor: pointer;">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button style="background: none; border: none; color: #f5576c; cursor: pointer; margin-left: 10px;">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>987654321</td>
+                                <td>@elena_smirnova</td>
+                                <td>Водитель</td>
+                                <td>11.02.2026</td>
+                                <td><span class="status pending">На проверке</span></td>
+                                <td>
+                                    <button style="background: none; border: none; color: #667eea; cursor: pointer;">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button style="background: none; border: none; color: #f5576c; cursor: pointer; margin-left: 10px;">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Текущее время
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleString('ru-RU', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('currentTime').innerHTML = `<i class="far fa-clock"></i> ${timeStr}`;
         }
-        
-        // Рассчитываем при загрузке
-        window.onload = function() {
-            calculatePrice();
-        };
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                
+                tab.classList.add('active');
+                const panelId = tab.getAttribute('data-tab');
+                document.getElementById(panelId).classList.add('active');
+            });
+        });
+
+        // Chart: Поездки
+        const ridesCtx = document.getElementById('ridesChart').getContext('2d');
+        new Chart(ridesCtx, {
+            type: 'line',
+            data: {
+                labels: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+                datasets: [{
+                    label: 'Количество поездок',
+                    data: [89, 102, 98, 115, 143, 167, 156],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            display: true,
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart: Прогноз спроса
+        const demandCtx = document.getElementById('demandChart').getContext('2d');
+        new Chart(demandCtx, {
+            type: 'bar',
+            data: {
+                labels: ['6-9', '9-12', '12-15', '15-18', '18-21', '21-24'],
+                datasets: [{
+                    label: 'Прогноз спроса',
+                    data: [45, 78, 82, 65, 92, 54],
+                    backgroundColor: [
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(79, 172, 254, 0.8)',
+                        'rgba(74, 85, 162, 0.8)',
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(240, 147, 251, 0.8)',
+                        'rgba(67, 233, 123, 0.8)'
+                    ],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Сохранение тарифов
+        function saveTariffs() {
+            const tariffs = {
+                basePrice: document.getElementById('basePrice').value,
+                pricePerKm: document.getElementById('pricePerKm').value,
+                minPrice: document.getElementById('minPrice').value,
+                commission: document.getElementById('commission').value,
+                trafficCoef: document.getElementById('trafficCoef').value,
+                rainCoef: document.getElementById('rainCoef').value,
+                snowCoef: document.getElementById('snowCoef').value,
+                nightCoef: document.getElementById('nightCoef').value,
+                holidayCoef: document.getElementById('holidayCoef').value
+            };
+            
+            // Здесь отправка на сервер
+            console.log('Сохраняем тарифы:', tariffs);
+            alert('✅ Тарифы успешно сохранены!');
+        }
+
+        function resetTariffs() {
+            document.getElementById('basePrice').value = '60';
+            document.getElementById('pricePerKm').value = '17';
+            document.getElementById('minPrice').value = '150';
+            document.getElementById('commission').value = '15';
+            document.getElementById('trafficCoef').value = '1.3';
+            document.getElementById('rainCoef').value = '1.2';
+            document.getElementById('snowCoef').value = '1.5';
+            document.getElementById('nightCoef').value = '1.4';
+            document.getElementById('holidayCoef').value = '1.3';
+            alert('🔄 Тарифы сброшены к настройкам по умолчанию');
+        }
+
+        // Настройки конкурентов
+        function saveCompetitorSettings() {
+            const settings = {
+                yandexAbove: document.getElementById('yandexAbove').value,
+                yandexBelow: document.getElementById('yandexBelow').value,
+                maximAbove: document.getElementById('maximAbove').value,
+                maximBelow: document.getElementById('maximBelow').value
+            };
+            console.log('Сохраняем настройки конкурентов:', settings);
+            alert('✅ Настройки мониторинга сохранены!');
+        }
+
+        function updateCompetitorPrices() {
+            alert('🔄 Обновление цен конкурентов...');
+            setTimeout(() => {
+                alert('✅ Цены конкурентов обновлены!');
+            }, 1500);
+        }
+
+        // ML функции
+        function trainModel() {
+            alert('🤖 Запуск обучения ML модели...');
+            setTimeout(() => {
+                alert('✅ Модель успешно обучена!\nТочность: 94.5% (+0.2%)');
+            }, 2000);
+        }
+
+        function exportModel() {
+            alert('📦 Экспорт модели в файл...');
+        }
+
+        function importModel() {
+            alert('📂 Выберите файл модели для импорта');
+        }
+
+        // Документы
+        function editDocument(docType) {
+            alert(`✏️ Редактирование документа: ${docType}`);
+        }
+
+        function downloadDocument(docType) {
+            alert(`📎 Скачивание документа: ${docType}`);
+        }
+
+        function createDocument() {
+            alert('➕ Создание нового документа');
+        }
+
+        function syncDocuments() {
+            alert('🔄 Синхронизация документов с Telegram ботом...');
+        }
+
+        // География
+        function addCity() {
+            alert('📍 Добавление нового города');
+        }
+
+        function editCities() {
+            alert('✏️ Редактирование списка городов');
+        }
+
+        // При загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚕 Такси-система v5.0 загружена');
+        });
     </script>
-    
-    <!-- Font Awesome для иконок -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </body>
 </html>
