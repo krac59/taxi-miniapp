@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚕 Такси-Система - MiniApp</title>
+    <meta name="telegram:viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="telegram:color-scheme" content="light dark">
+    
+    <style>
+        :root {
+            --primary: #1E88E5;
+            --secondary: #FF6B6B;
+            --success: #4CAF50;
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary), #0d47a1);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        
+        .btn:hover {
+            background: #1565C0;
+            transform: scale(1.02);
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        .result {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .price {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: var(--dark);
+                color: #f0f0f0;
+            }
+            
+            .card {
+                background: #2d2d2d;
+            }
+            
+            .input-group select {
+                background: #3d3d3d;
+                color: #f0f0f0;
+                border-color: #444;
+            }
+        }
+    </style>
+    
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-taxi"></i> Такси Краснодар</h1>
+        <p>AI прогноз цен • Быстрый заказ • Безопасно</p>
+    </div>
+    
+    <div class="card">
+        <h2 style="color: var(--primary); margin-bottom: 20px;">
+            <i class="fas fa-calculator"></i> Рассчитать стоимость
+        </h2>
+        
+        <div class="input-group">
+            <label><i class="fas fa-map-marker-alt"></i> Откуда:</label>
+            <select id="fromCity">
+                <option value="Краснодар">Краснодар</option>
+                <option value="Сочи">Сочи</option>
+                <option value="Новороссийск">Новороссийск</option>
+                <option value="Армавир">Армавир</option>
+                <option value="Анапа">Анапа</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label><i class="fas fa-flag-checkered"></i> Куда:</label>
+            <select id="toCity">
+                <option value="Сочи">Сочи</option>
+                <option value="Краснодар">Краснодар</option>
+                <option value="Новороссийск">Новороссийск</option>
+                <option value="Армавир">Армавир</option>
+                <option value="Анапа">Анапа</option>
+            </select>
+        </div>
+        
+        <button class="btn" onclick="calculatePrice()">
+            <i class="fas fa-calculator"></i> Рассчитать
+        </button>
+    </div>
+    
+    <div id="result" class="result">
+        <h3><i class="fas fa-coins"></i> Стоимость поездки</h3>
+        <div class="price" id="calculatedPrice">0 ₽</div>
+        <p id="distance">Расстояние: 0 км</p>
+        <p id="time">Примерное время: 0 ч</p>
+        
+        <button class="btn" onclick="orderTaxi()" style="background: var(--success); margin-top: 20px;">
+            <i class="fas fa-taxi"></i> Заказать такси
+        </button>
+    </div>
+    
+    <div class="card">
+        <h3 style="color: var(--primary); margin-bottom: 15px;">
+            <i class="fas fa-bolt"></i> Быстрые маршруты
+        </h3>
+        <button class="btn" onclick="setRoute('Краснодар', 'Сочи')" style="background: var(--secondary); margin-bottom: 10px;">
+            Краснодар → Сочи
+        </button>
+        <button class="btn" onclick="setRoute('Краснодар', 'Новороссийск')" style="background: var(--secondary); margin-bottom: 10px;">
+            Краснодар → Новороссийск
+        </button>
+        <button class="btn" onclick="setRoute('Сочи', 'Краснодар')" style="background: var(--secondary);">
+            Сочи → Краснодар
+        </button>
+    </div>
+    
+    <script>
+        // Инициализация Telegram Web App
+        if (window.Telegram && Telegram.WebApp) {
+            Telegram.WebApp.ready();
+            Telegram.WebApp.expand();
+            Telegram.WebApp.setHeaderColor('#1E88E5');
+            Telegram.WebApp.setBackgroundColor('#f8f9fa');
+            
+            // Получаем данные пользователя
+            const user = Telegram.WebApp.initDataUnsafe.user;
+            if (user) {
+                console.log('Пользователь:', user.first_name);
+            }
+        }
+        
+        // Маршруты и цены (упрощенная версия)
+        const routes = {
+            'Краснодар-Сочи': { price: 4500, distance: 280, time: 4.5 },
+            'Краснодар-Новороссийск': { price: 2800, distance: 140, time: 2.5 },
+            'Сочи-Краснодар': { price: 4500, distance: 280, time: 4.5 },
+            'Новороссийск-Краснодар': { price: 2800, distance: 140, time: 2.5 },
+            'Краснодар-Армавир': { price: 2200, distance: 180, time: 3 },
+            'Краснодар-Анапа': { price: 2400, distance: 160, time: 2.5 },
+            'default': { price: 1500, distance: 150, time: 2.5 }
+        };
+        
+        function setRoute(from, to) {
+            document.getElementById('fromCity').value = from;
+            document.getElementById('toCity').value = to;
+            calculatePrice();
+        }
+        
+        function calculatePrice() {
+            const fromCity = document.getElementById('fromCity').value;
+            const toCity = document.getElementById('toCity').value;
+            
+            const routeKey = `${fromCity}-${toCity}`;
+            const route = routes[routeKey] || routes['default'];
+            
+            // Добавляем случайность для реалистичности
+            const randomFactor = 0.9 + Math.random() * 0.2; // ±10%
+            const finalPrice = Math.round(route.price * randomFactor / 100) * 100;
+            
+            // Показываем результат
+            const resultDiv = document.getElementById('result');
+            document.getElementById('calculatedPrice').textContent = `${finalPrice.toLocaleString()} ₽`;
+            document.getElementById('distance').textContent = `Расстояние: ${route.distance} км`;
+            document.getElementById('time').textContent = `Примерное время: ${route.time} ч`;
+            
+            resultDiv.classList.add('show');
+            
+            // Прокручиваем к результату
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function orderTaxi() {
+            const fromCity = document.getElementById('fromCity').value;
+            const toCity = document.getElementById('toCity').value;
+            const price = document.getElementById('calculatedPrice').textContent;
+            
+            if (window.Telegram && Telegram.WebApp) {
+                // Отправляем данные в Telegram бота
+                Telegram.WebApp.sendData(JSON.stringify({
+                    action: 'order_taxi',
+                    from_city: fromCity,
+                    to_city: toCity,
+                    price: price
+                }));
+                
+                // Закрываем Web App
+                Telegram.WebApp.close();
+            } else {
+                alert(`Заказ создан!\n${fromCity} → ${toCity}\nСтоимость: ${price}\n\nВернитесь в Telegram для подтверждения.`);
+            }
+        }
+        
+        // Рассчитываем при загрузке
+        window.onload = function() {
+            calculatePrice();
+        };
+    </script>
+    
+    <!-- Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</body>
+</html>
